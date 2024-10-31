@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CertificateService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Projeto-Queijos-Finos</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.service</a> &gt; <span class="el_source">CertificateService.java</span></div><h1>CertificateService.java</h1><pre class="source lang-java linenums">package com.example.demo.service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.Certificate;
+import com.example.demo.entity.enums.TipoCertificado;
+import com.example.demo.repository.CertificateRepository;
+
+@Service
+<span class="fc" id="L15">public class CertificateService {</span>
+   
+    @Autowired
+    private CertificateRepository certificateRepository; 
+    
+    public List&lt;Certificate&gt; getListCertificatesByProducerId(Long producerId) {
+        // Find all certificates
+<span class="nc" id="L22">        List&lt;Certificate&gt; certificates = certificateRepository.findAll();</span>
+
+        // Filter certificates associated with the given producerId
+<span class="nc" id="L25">        List&lt;Certificate&gt; certificatesFiltered = certificates.stream()</span>
+<span class="nc bnc" id="L26" title="All 4 branches missed.">                .filter(cert -&gt; cert.getProducer() != null &amp;&amp; cert.getProducer().getId().equals(producerId))</span>
+<span class="nc" id="L27">                .collect(Collectors.toList());</span>
+
+        // Return the filtered list, or an empty list if certificatesFiltered is null
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        return certificatesFiltered != null ? certificatesFiltered : Collections.emptyList();</span>
+    }
+
+    public long countCertificadoSIMPOA() {
+<span class="nc" id="L34">    return certificateRepository.countByTipoCertificado(TipoCertificado.SIMPOA);</span>
+
+    }
+
+    public long countCertificadoSUSAF() {
+<span class="nc" id="L39">        return certificateRepository.countByTipoCertificado(TipoCertificado.SUSAF);</span>
+    
+    }
+
+    public long countCertificadoSISBI() {
+<span class="nc" id="L44">        return certificateRepository.countByTipoCertificado(TipoCertificado.SISBI);</span>
+    
+    }
+    
+    public long countCertificadoSELOARTE() {
+<span class="nc" id="L49">        return certificateRepository.countByTipoCertificado(TipoCertificado.SELOARTE);</span>
+        
+    }
+
+    public long countCertificadoCIF() {
+<span class="nc" id="L54">        return certificateRepository.countByTipoCertificado(TipoCertificado.CIF); //SIF</span>
+    
+    }    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

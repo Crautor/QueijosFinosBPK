@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DashboardProducer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Projeto-Queijos-Finos</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.controller</a> &gt; <span class="el_source">DashboardProducer.java</span></div><h1>DashboardProducer.java</h1><pre class="source lang-java linenums">package com.example.demo.controller;
+
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.example.demo.service.CertificateService;
+import com.example.demo.service.TechnologyService;
+import com.example.demo.service.TransferService;
+
+@RestController
+<span class="fc" id="L17">public class DashboardProducer {</span>
+
+    @Autowired
+    TransferService transferService;
+
+    @Autowired
+    TechnologyService technologyService;
+
+    @Autowired
+    CertificateService certificateService;
+
+    @GetMapping(&quot;/dashboardProducer&quot;)
+    public ModelAndView dashboardProducer() {
+<span class="nc" id="L30">        ModelAndView dashboardProducer = new ModelAndView();</span>
+<span class="nc" id="L31">        dashboardProducer.setViewName(&quot;producerDashboards/producerDashboards&quot;);</span>
+
+        //METODO DE CONSULTA PARA O PRIMEIRO GRAFICO
+<span class="nc" id="L34">        long producingCount = transferService.countStatusProducing();</span>
+<span class="nc" id="L35">        long complementationCount = transferService.countStatusComplementation();</span>
+<span class="nc" id="L36">        long withdrawalCount = transferService.countStatusWithdrawal();</span>
+<span class="nc" id="L37">        long disconnectedCount = transferService.countStatusDisconnected();</span>
+<span class="nc" id="L38">        dashboardProducer.addObject(&quot;producingCount&quot;, producingCount);</span>
+<span class="nc" id="L39">        dashboardProducer.addObject(&quot;complementationCount&quot;, complementationCount);</span>
+<span class="nc" id="L40">        dashboardProducer.addObject(&quot;withdrawalCount&quot;, withdrawalCount);</span>
+<span class="nc" id="L41">        dashboardProducer.addObject(&quot;disconnectedCount&quot;, disconnectedCount);</span>
+
+
+        //METODO DE CONSULTA PARA O SEGUNDO GRAFICO
+<span class="nc" id="L45">        List&lt;String&gt; activeTechnologyNames = technologyService.getAllActiveTechnologyNames();</span>
+<span class="nc" id="L46">        List&lt;Long&gt; producingCounts = activeTechnologyNames.stream()</span>
+<span class="nc" id="L47">                .map(transferService::countProducingByTechnology)</span>
+<span class="nc" id="L48">                .collect(Collectors.toList());</span>
+<span class="nc" id="L49">        List&lt;Long&gt; complementationCounts = activeTechnologyNames.stream()</span>
+<span class="nc" id="L50">                .map(transferService::countComplementationByTechnology)</span>
+<span class="nc" id="L51">                .collect(Collectors.toList());</span>
+<span class="nc" id="L52">        List&lt;Long&gt; withdrawalCounts = activeTechnologyNames.stream()</span>
+<span class="nc" id="L53">                .map(transferService::countWithdrawalByTechnology)</span>
+<span class="nc" id="L54">                .collect(Collectors.toList());</span>
+<span class="nc" id="L55">        List&lt;Long&gt; disconnectedCounts = activeTechnologyNames.stream()</span>
+<span class="nc" id="L56">                .map(transferService::countDisconnectedByTechnology)</span>
+<span class="nc" id="L57">                .collect(Collectors.toList());</span>
+
+<span class="nc" id="L59">        dashboardProducer.addObject(&quot;activeTechnologyNames&quot;, activeTechnologyNames);</span>
+<span class="nc" id="L60">        dashboardProducer.addObject(&quot;producingCounts&quot;, producingCounts);</span>
+<span class="nc" id="L61">        dashboardProducer.addObject(&quot;complementationCounts&quot;, complementationCounts);</span>
+<span class="nc" id="L62">        dashboardProducer.addObject(&quot;withdrawalCounts&quot;, withdrawalCounts);</span>
+<span class="nc" id="L63">        dashboardProducer.addObject(&quot;disconnectedCounts&quot;, disconnectedCounts);</span>
+
+        //METODO DE CONSULTA PARA O TERCEIRO GRAFICO
+<span class="nc" id="L66">        long SIMPOACount = certificateService.countCertificadoSIMPOA();</span>
+<span class="nc" id="L67">        long SUSAFCount = certificateService.countCertificadoSUSAF();</span>
+<span class="nc" id="L68">        long SISBICount = certificateService.countCertificadoSISBI();</span>
+<span class="nc" id="L69">        long SELOARTECount = certificateService.countCertificadoSELOARTE();</span>
+<span class="nc" id="L70">        long CIFCount = certificateService.countCertificadoCIF();</span>
+<span class="nc" id="L71">        dashboardProducer.addObject(&quot;SIMPOACount&quot;, SIMPOACount);</span>
+<span class="nc" id="L72">        dashboardProducer.addObject(&quot;SUSAFCount&quot;, SUSAFCount);</span>
+<span class="nc" id="L73">        dashboardProducer.addObject(&quot;SISBICount&quot;, SISBICount);</span>
+<span class="nc" id="L74">        dashboardProducer.addObject(&quot;SELOARTECount&quot;, SELOARTECount);</span>
+<span class="nc" id="L75">        dashboardProducer.addObject(&quot;CIFCount&quot;, CIFCount);        </span>
+
+<span class="nc" id="L77">        return dashboardProducer;</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

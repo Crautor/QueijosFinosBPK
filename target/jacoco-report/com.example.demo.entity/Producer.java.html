@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Producer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Projeto-Queijos-Finos</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.entity</a> &gt; <span class="el_source">Producer.java</span></div><h1>Producer.java</h1><pre class="source lang-java linenums">package com.example.demo.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = &quot;tb_producer&quot;)
+<span class="fc" id="L17">public class Producer {</span>
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String observation;
+    private String name;
+    private String cpf;
+    private String cnpj;
+    private String socialReason;
+    private String email;
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L30">        final int prime = 31;</span>
+<span class="nc" id="L31">        int result = 1;</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        result = prime * result + ((id == null) ? 0 : id.hashCode());</span>
+<span class="nc" id="L33">        return result;</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (this == obj)</span>
+<span class="nc" id="L39">            return true;</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (obj == null)</span>
+<span class="nc" id="L41">            return false;</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (getClass() != obj.getClass())</span>
+<span class="nc" id="L43">            return false;</span>
+<span class="nc" id="L44">        Producer other = (Producer) obj;</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (other.id != null)</span>
+<span class="nc" id="L47">                return false;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        } else if (!id.equals(other.id))</span>
+<span class="nc" id="L49">            return false;</span>
+<span class="nc" id="L50">        return true;</span>
+    }
+
+<span class="fc" id="L53">    @OneToMany(mappedBy = &quot;producer&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private List&lt;PhoneNumber&gt; phoneNumbers = new ArrayList&lt;&gt;();
+<span class="fc" id="L55">    @OneToMany(mappedBy = &quot;producer&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private List&lt;Certificate&gt; certificates = new ArrayList&lt;&gt;();
+<span class="fc" id="L57">    @OneToOne(mappedBy = &quot;producer&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private Address address = new Address();
+<span class="fc" id="L59">    @OneToMany(mappedBy = &quot;producer&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private List&lt;Document&gt; documents = new ArrayList&lt;&gt;();
+<span class="fc" id="L61">    @OneToMany(mappedBy = &quot;producer&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private List&lt;Transfer&gt; transfers = new ArrayList&lt;&gt;();
+
+<span class="fc" id="L64">    @OneToOne(mappedBy = &quot;producer&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private Contract contract = new Contract();
+
+    public Contract getContract() {
+<span class="nc" id="L68">        return contract;</span>
+    }
+
+    public void setContract(Contract contract) {
+<span class="nc" id="L72">        this.contract = contract;</span>
+<span class="nc" id="L73">    }</span>
+
+    public List&lt;Transfer&gt; getTransfers() {
+<span class="nc" id="L76">        return transfers;</span>
+    }
+
+    public void setTransfers(List&lt;Transfer&gt; transfers) {
+<span class="nc" id="L80">        this.transfers = transfers;</span>
+<span class="nc" id="L81">    }</span>
+
+    public List&lt;Document&gt; getDocuments() {
+<span class="nc" id="L84">        return documents;</span>
+    }
+
+    public void setDocuments(List&lt;Document&gt; documents) {
+<span class="nc" id="L88">        this.documents = documents;</span>
+<span class="nc" id="L89">    }</span>
+
+    public Address getAddress() {
+<span class="nc" id="L92">        return address;</span>
+    }
+
+    public void setAddress(Address address) {
+<span class="nc" id="L96">        this.address = address;</span>
+<span class="nc" id="L97">    }</span>
+
+    public Long getId() {
+<span class="nc" id="L100">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L104">        this.id = id;</span>
+<span class="nc" id="L105">    }</span>
+
+    public String getObservation() {
+<span class="nc" id="L108">        return observation;</span>
+    }
+
+    public void setObservation(String observation) {
+<span class="nc" id="L112">        this.observation = observation;</span>
+<span class="nc" id="L113">    }</span>
+
+    public String getName() {
+<span class="nc" id="L116">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L120">        this.name = name;</span>
+<span class="nc" id="L121">    }</span>
+
+    public String getCpf() {
+<span class="nc" id="L124">        return cpf;</span>
+    }
+
+    public void setCpf(String cpf) {
+<span class="nc" id="L128">        this.cpf = cpf;</span>
+<span class="nc" id="L129">    }</span>
+
+    public String getCnpj() {
+<span class="nc" id="L132">        return cnpj;</span>
+    }
+
+    public void setCnpj(String cnpj) {
+<span class="nc" id="L136">        this.cnpj = cnpj;</span>
+<span class="nc" id="L137">    }</span>
+
+    public String getSocialReason() {
+<span class="nc" id="L140">        return socialReason;</span>
+    }
+
+    public void setSocialReason(String corporateName) {
+<span class="nc" id="L144">        this.socialReason = corporateName;</span>
+<span class="nc" id="L145">    }</span>
+
+    public String getEmail() {
+<span class="nc" id="L148">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="nc" id="L152">        this.email = email;</span>
+<span class="nc" id="L153">    }</span>
+
+    public List&lt;PhoneNumber&gt; getPhoneNumbers() {
+<span class="nc" id="L156">        return phoneNumbers;</span>
+    }
+
+    public void setPhoneNumbers(List&lt;PhoneNumber&gt; phoneNumbers) {
+<span class="nc" id="L160">        this.phoneNumbers = phoneNumbers;</span>
+<span class="nc" id="L161">    }</span>
+
+    public List&lt;Certificate&gt; getCertificates() {
+<span class="nc" id="L164">        return certificates;</span>
+    }
+
+    public void setCertificates(List&lt;Certificate&gt; certificates) {
+<span class="nc" id="L168">        this.certificates = certificates;</span>
+<span class="nc" id="L169">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

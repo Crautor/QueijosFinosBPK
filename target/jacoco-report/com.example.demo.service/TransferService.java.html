@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransferService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Projeto-Queijos-Finos</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.service</a> &gt; <span class="el_source">TransferService.java</span></div><h1>TransferService.java</h1><pre class="source lang-java linenums">package com.example.demo.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.demo.entity.enums.TipoStatusProduction;
+import com.example.demo.repository.TransferRepository;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.validation.annotation.Validated;
+import com.example.demo.entity.Transfer;
+
+@Service
+<span class="fc" id="L13">public class TransferService {</span>
+
+    @Autowired
+    private TransferRepository transferRepository;
+
+    public long countStatusProducing() {
+<span class="nc" id="L19">        return transferRepository.countByTipoStatusProduction(TipoStatusProduction.PRODUCING);</span>
+    }
+
+    public long countStatusComplementation() {
+<span class="nc" id="L23">        return transferRepository.countByTipoStatusProduction(TipoStatusProduction.COMPLEMENTATION);</span>
+    }
+
+    public long countStatusWithdrawal() {
+<span class="nc" id="L27">        return transferRepository.countByTipoStatusProduction(TipoStatusProduction.WITHDRAWAL);</span>
+    }
+
+    public long countStatusDisconnected() {
+<span class="nc" id="L31">        return transferRepository.countByTipoStatusProduction(TipoStatusProduction.DISCONNECTED);</span>
+    }
+
+    
+    public long countProducingByTechnology(String technologyName) {
+<span class="nc" id="L36">        return transferRepository.countByTechnologyNameAndTipoStatusProduction(technologyName, TipoStatusProduction.PRODUCING);</span>
+    }
+
+    public long countComplementationByTechnology(String technologyName) {
+<span class="nc" id="L40">        return transferRepository.countByTechnologyNameAndTipoStatusProduction(technologyName, TipoStatusProduction.COMPLEMENTATION);</span>
+    }
+
+    public long countWithdrawalByTechnology(String technologyName) {
+<span class="nc" id="L44">        return transferRepository.countByTechnologyNameAndTipoStatusProduction(technologyName, TipoStatusProduction.WITHDRAWAL);</span>
+    }
+
+    public long countDisconnectedByTechnology(String technologyName) {
+<span class="nc" id="L48">        return transferRepository.countByTechnologyNameAndTipoStatusProduction(technologyName, TipoStatusProduction.DISCONNECTED);</span>
+    }
+
+
+    public void createTransfer(Transfer transfer) {
+
+<span class="nc" id="L54">        transferRepository.save(transfer);</span>
+<span class="nc" id="L55">    }</span>
+
+    @Validated
+    public Transfer updateTransfer(Transfer updateTransfer) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (updateTransfer.getId() == null) {</span>
+<span class="nc" id="L60">            throw new IllegalArgumentException(&quot;ID da transferência não fornecido no objeto atualizado.&quot;);</span>
+        }
+
+<span class="nc" id="L63">        Optional&lt;Transfer&gt; optionalTransfer = transferRepository.findById(updateTransfer.getId());</span>
+
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (optionalTransfer.isPresent()) {</span>
+<span class="nc" id="L66">            Transfer existingTransfer = optionalTransfer.get();</span>
+<span class="nc" id="L67">            existingTransfer.setTechnology(updateTransfer.getTechnology());</span>
+<span class="nc" id="L68">            existingTransfer.setTipoStatusProduction(updateTransfer.getTipoStatusProduction());</span>
+<span class="nc" id="L69">            existingTransfer.setStartDate(updateTransfer.getStartDate());</span>
+<span class="nc" id="L70">            existingTransfer.setCompletionDate(updateTransfer.getCompletionDate());</span>
+<span class="nc" id="L71">            return transferRepository.save(existingTransfer);</span>
+        } else {
+<span class="nc" id="L73">            throw new IllegalArgumentException(&quot;Transfer não encontrada com o ID fornecido: &quot; + updateTransfer.getId());</span>
+        }
+    }
+
+    public List&lt;Transfer&gt; getAllTransfers() {
+<span class="nc" id="L78">        return transferRepository.findAll();</span>
+    }
+
+    public Transfer getTransferById(Long id) {
+<span class="nc" id="L82">        return transferRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Transferência não encontrada&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

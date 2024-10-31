@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TechnologyController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Projeto-Queijos-Finos</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.controller</a> &gt; <span class="el_source">TechnologyController.java</span></div><h1>TechnologyController.java</h1><pre class="source lang-java linenums">package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.example.demo.entity.Technology;
+import com.example.demo.service.TechnologyService;
+
+import ch.qos.logback.core.model.Model;
+import jakarta.persistence.EntityNotFoundException;
+
+
+@RestController
+<span class="fc" id="L25">public class TechnologyController {</span>
+
+    @Autowired
+    private TechnologyService technologyService;
+
+    @GetMapping(&quot;/tecnologias&quot;)
+    public ModelAndView iniciarTela(Model model) {
+<span class="nc" id="L32">        Technology technology = new Technology();</span>
+
+<span class="nc" id="L34">        ModelAndView modelAndView = new ModelAndView();</span>
+<span class="nc" id="L35">        modelAndView.setViewName(&quot;gerenciamentoTecnologias&quot;);</span>
+<span class="nc" id="L36">        modelAndView.addObject(&quot;technology&quot;, technology);</span>
+<span class="nc" id="L37">        modelAndView.addObject(&quot;report&quot;, technologyService.generateReportForAllTechnologies());</span>
+<span class="nc" id="L38">        return modelAndView;</span>
+    }
+
+    @PostMapping(&quot;/tecnologias/cadastrar&quot;)
+    public RedirectView createTechnology(@ModelAttribute(&quot;technology&quot;) Technology technology, RedirectAttributes attributes) {
+        try {
+<span class="nc" id="L44">            technologyService.createTechnology(technology);</span>
+<span class="nc" id="L45">            attributes.addFlashAttribute(&quot;condition&quot;, &quot;condition&quot;);</span>
+<span class="nc" id="L46">        } catch (DataIntegrityViolationException e) {</span>
+<span class="nc" id="L47">            attributes.addFlashAttribute(&quot;mensagem&quot;, &quot;Erro ao cadastrar tecnologia: &quot; + e.getMessage());</span>
+<span class="nc" id="L48">        }</span>
+<span class="nc" id="L49">        return new RedirectView(&quot;/tecnologias&quot;);</span>
+    }
+
+    @PostMapping(&quot;/technology/updateTechnology&quot;)
+    public RedirectView updateTechnology(@ModelAttribute(&quot;technology&quot;) Technology technology, RedirectAttributes attributes) {
+
+        try {
+<span class="nc" id="L56">            technologyService.updateTechnology(technology);</span>
+<span class="nc" id="L57">            attributes.addFlashAttribute(&quot;condition&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L58">        } catch (DataIntegrityViolationException e) {</span>
+<span class="nc" id="L59">            attributes.addFlashAttribute(&quot;mensagem&quot;, &quot;Email ja cadastardo no sistema &quot;+e.getMessage());</span>
+<span class="nc" id="L60">        }</span>
+
+<span class="nc" id="L62">        return new RedirectView(&quot;/tecnologias&quot;);</span>
+    }
+
+
+    @PutMapping(&quot;technology/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; changeTechnologyStatus(@PathVariable Long id) {
+        try {
+<span class="nc" id="L69">            System.out.println(&quot;O ID E:&quot; + id);</span>
+<span class="nc" id="L70">            technologyService.changeTechnologyStatus(id);</span>
+<span class="nc" id="L71">            return ResponseEntity.ok().build();</span>
+<span class="nc" id="L72">        } catch (EntityNotFoundException e) {</span>
+<span class="nc" id="L73">            return ResponseEntity.notFound().build();</span>
+        }
+    }
+
+
+    @DeleteMapping(&quot;/technologies/{technologyId}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteUser(@PathVariable Long technologyID) {
+<span class="nc" id="L80">        technologyService.deleteTechnology(technologyID);</span>
+<span class="nc" id="L81">        return ResponseEntity.ok().build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

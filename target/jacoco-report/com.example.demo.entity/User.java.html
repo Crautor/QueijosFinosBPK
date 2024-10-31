@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Projeto-Queijos-Finos</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.entity</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.example.demo.entity;
+
+import com.example.demo.entity.enums.TipoUserPermission;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+@Entity
+@Table(name = &quot;tb_user&quot;)
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = &quot;O nome do usuário é obrigatório.&quot;)
+    @Size(min = 3, max = 50, message = &quot;O nome do usuário deve ter entre 3 e 50 caracteres.&quot;)
+    private String nameUser;
+
+    @NotBlank(message = &quot;O email é obrigatório.&quot;)
+    @Email(message = &quot;O email fornecido não é válido.&quot;)
+    @Column(unique = true)
+    private String email;
+
+    @NotBlank(message = &quot;A senha é obrigatória.&quot;)
+    @Size(min = 6, max = 100, message = &quot;A senha deve ter entre 6 e 100 caracteres.&quot;)
+    private String password;
+
+    @NotNull(message = &quot;A permissão do usuário é obrigatória.&quot;)
+    private TipoUserPermission tipoUserPermission;
+
+    
+    public void setId(Long id) {
+<span class="nc" id="L40">        this.id = id;</span>
+<span class="nc" id="L41">    }</span>
+    
+    public void setNameUser(String nameUser) {
+<span class="nc" id="L44">        this.nameUser = nameUser;</span>
+<span class="nc" id="L45">    }</span>
+
+    public void setEmail(String email) {
+<span class="nc" id="L48">        this.email = email;</span>
+<span class="nc" id="L49">    }</span>
+
+    public void setPassword(String password) {
+<span class="nc" id="L52">        this.password = password;</span>
+<span class="nc" id="L53">    }</span>
+
+    public void setTipoUserPermission(TipoUserPermission tipoUserPermission) {
+<span class="nc" id="L56">        this.tipoUserPermission = tipoUserPermission;</span>
+<span class="nc" id="L57">    }</span>
+
+    public String getNameUser() {
+<span class="nc" id="L60">        return nameUser;</span>
+    }
+
+    public String getEmail() {
+<span class="nc" id="L64">        return email;</span>
+    }
+
+    public String getPassword() {
+<span class="nc" id="L68">        return password;</span>
+    }
+
+    public Long getId() {
+<span class="nc" id="L72">        return id;</span>
+    }
+
+    public TipoUserPermission getTipoUserPermission() {
+<span class="nc" id="L76">        return tipoUserPermission;</span>
+    }
+
+<span class="fc" id="L79">    public User(){</span>
+        
+<span class="fc" id="L81">    }</span>
+    
+    public User(Long id, String nameUser, 
+                String email, String password,
+<span class="nc" id="L85">                TipoUserPermission tipoUserPermission) { </span>
+<span class="nc" id="L86">        this.id = id; </span>
+<span class="nc" id="L87">        this.nameUser = nameUser;</span>
+<span class="nc" id="L88">        this.email = email;</span>
+<span class="nc" id="L89">        this.password = password;</span>
+<span class="nc" id="L90">        this.tipoUserPermission = tipoUserPermission;</span>
+<span class="nc" id="L91">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L95">        final int prime = 31;</span>
+<span class="nc" id="L96">        int result = 1;</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        result = prime * result + ((id == null) ? 0 : id.hashCode());</span>
+<span class="nc" id="L98">        return result;</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (this == obj)</span>
+<span class="nc" id="L104">            return true;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (obj == null)</span>
+<span class="nc" id="L106">            return false;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (getClass() != obj.getClass())</span>
+<span class="nc" id="L108">            return false;</span>
+<span class="nc" id="L109">        User other = (User) obj;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (other.id != null)</span>
+<span class="nc" id="L112">                return false;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        } else if (!id.equals(other.id))</span>
+<span class="nc" id="L114">            return false;</span>
+<span class="nc" id="L115">        return true;</span>
+    }
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

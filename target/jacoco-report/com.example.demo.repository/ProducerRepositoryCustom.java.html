@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProducerRepositoryCustom.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Projeto-Queijos-Finos</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.repository</a> &gt; <span class="el_source">ProducerRepositoryCustom.java</span></div><h1>ProducerRepositoryCustom.java</h1><pre class="source lang-java linenums">package com.example.demo.repository;
+
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.example.demo.dtos.ProducerFilterDto;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+
+@Repository
+<span class="fc" id="L17">public class ProducerRepositoryCustom {</span>
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public List&lt;Map&lt;String, Object&gt;&gt; getProducerInfo() {
+<span class="nc" id="L24">        List&lt;Object[]&gt; results = entityManager.createQuery(</span>
+            &quot;SELECT p.id, p.name, c.expirationDate, c.status &quot; +
+            &quot;FROM Producer p &quot; +
+            &quot;LEFT JOIN p.contract c&quot;)
+<span class="nc" id="L28">        .getResultList();</span>
+
+<span class="nc" id="L30">        List&lt;Map&lt;String, Object&gt;&gt; producerInfoList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        for (Object[] result : results) {</span>
+<span class="nc" id="L32">            Map&lt;String, Object&gt; producerInfo = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L33">            producerInfo.put(&quot;id&quot;, result[0]);</span>
+<span class="nc" id="L34">            producerInfo.put(&quot;nameProducer&quot;, result[1]);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">            producerInfo.put(&quot;expirationDate&quot;, result[2] != null ? result[2] : &quot;Sem contrato ativo&quot;);</span>
+<span class="nc" id="L36">            producerInfo.put(&quot;status&quot;, result[3]);</span>
+<span class="nc" id="L37">            producerInfoList.add(producerInfo);</span>
+<span class="nc" id="L38">        }</span>
+<span class="nc" id="L39">        return producerInfoList;</span>
+    }
+   
+    public List&lt;Map&lt;String, Object&gt;&gt; getProducerInfoDashboard(Long id) {
+<span class="nc" id="L43">        String jpql = &quot;SELECT p.id, p.name, p.socialReason, p.cpf, p.cnpj, ph.phone, p.observation, a.cep, a.neighborhood, a.street, a.city, a.state, a.number &quot; +</span>
+                      &quot;FROM Producer p &quot; +
+                      &quot;INNER JOIN p.phoneNumbers ph &quot; +
+                      &quot;LEFT JOIN p.address a &quot; +
+                      &quot;WHERE p.id = :id&quot;;
+    
+<span class="nc" id="L49">        TypedQuery&lt;Object[]&gt; query = entityManager.createQuery(jpql, Object[].class);</span>
+<span class="nc" id="L50">        query.setParameter(&quot;id&quot;, id); </span>
+    
+<span class="nc" id="L52">        List&lt;Object[]&gt; results = query.getResultList();</span>
+    
+<span class="nc" id="L54">        List&lt;Map&lt;String, Object&gt;&gt; producerInfoDashboard = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        for (Object[] result : results) {</span>
+<span class="nc" id="L56">            Map&lt;String, Object&gt; producerInfo = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L57">            producerInfo.put(&quot;id&quot;, result[0]);</span>
+<span class="nc" id="L58">            producerInfo.put(&quot;name&quot;, result[1]);</span>
+<span class="nc" id="L59">            producerInfo.put(&quot;socialReason&quot;, result[2]);</span>
+<span class="nc" id="L60">            producerInfo.put(&quot;cpf&quot;, result[3]);</span>
+<span class="nc" id="L61">            producerInfo.put(&quot;cnpj&quot;, result[4]);</span>
+<span class="nc" id="L62">            producerInfo.put(&quot;phone&quot;, result[5]);</span>
+<span class="nc" id="L63">            producerInfo.put(&quot;observation&quot;, result[6]);</span>
+<span class="nc" id="L64">            producerInfo.put(&quot;cep&quot;, result[7]);</span>
+<span class="nc" id="L65">            producerInfo.put(&quot;neighborhood&quot;, result[8]);</span>
+<span class="nc" id="L66">            producerInfo.put(&quot;street&quot;, result[9]);</span>
+<span class="nc" id="L67">            producerInfo.put(&quot;city&quot;, result[10]);</span>
+<span class="nc" id="L68">            producerInfo.put(&quot;state&quot;, result[11]);</span>
+<span class="nc" id="L69">            producerInfo.put(&quot;number&quot;, result[12]);</span>
+<span class="nc" id="L70">            producerInfoDashboard.add(producerInfo);</span>
+<span class="nc" id="L71">        }</span>
+    
+<span class="nc" id="L73">        return producerInfoDashboard;</span>
+    }
+    
+    
+
+    public List&lt;Map&lt;String, Object&gt;&gt; getProducerInfoFilter(ProducerFilterDto producerFilterDto) {
+<span class="nc" id="L79">        StringBuilder jpqlBuilder = new StringBuilder();</span>
+<span class="nc" id="L80">        jpqlBuilder.append(&quot;SELECT p.id, p.name, c.expirationDate, c.status &quot;)</span>
+<span class="nc" id="L81">                   .append(&quot;FROM Producer p &quot;)</span>
+<span class="nc" id="L82">                   .append(&quot;INNER JOIN p.address a &quot;)</span>
+<span class="nc" id="L83">                   .append(&quot;LEFT JOIN p.contract c &quot;);</span>
+
+<span class="nc bnc" id="L85" title="All 4 branches missed.">        if (producerFilterDto.getTechnologyName() != null &amp;&amp; !producerFilterDto.getTechnologyName().isEmpty()) {</span>
+<span class="nc" id="L86">            jpqlBuilder.append(&quot;INNER JOIN p.transfers tr &quot;)</span>
+<span class="nc" id="L87">                       .append(&quot;INNER JOIN tr.technology t &quot;);</span>
+        }
+
+<span class="nc" id="L90">        jpqlBuilder.append(&quot;WHERE 1=1 &quot;);</span>
+
+<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (producerFilterDto.getNameProducer() != null &amp;&amp; !producerFilterDto.getNameProducer().isEmpty()) {</span>
+<span class="nc" id="L93">            jpqlBuilder.append(&quot;AND LOWER(p.name) LIKE LOWER(:name) &quot;);</span>
+        }
+
+<span class="nc bnc" id="L96" title="All 4 branches missed.">        if (producerFilterDto.getCity() != null &amp;&amp; !producerFilterDto.getCity().isEmpty()) {</span>
+<span class="nc" id="L97">            jpqlBuilder.append(&quot;AND LOWER(a.city) LIKE LOWER(:city) &quot;);</span>
+        }
+
+<span class="nc bnc" id="L100" title="All 4 branches missed.">        if (producerFilterDto.getStatus() != null &amp;&amp; !producerFilterDto.getStatus().isEmpty()) {</span>
+<span class="nc" id="L101">            jpqlBuilder.append(&quot;AND c.status = :status &quot;);</span>
+        }
+
+<span class="nc bnc" id="L104" title="All 4 branches missed.">        if (producerFilterDto.getTechnologyName() != null &amp;&amp; !producerFilterDto.getTechnologyName().isEmpty()) {</span>
+<span class="nc" id="L105">            jpqlBuilder.append(&quot;AND t.name = :technologyName &quot;);</span>
+        }
+
+<span class="nc" id="L108">        TypedQuery&lt;Object[]&gt; query = entityManager.createQuery(jpqlBuilder.toString(), Object[].class);</span>
+
+<span class="nc bnc" id="L110" title="All 4 branches missed.">        if (producerFilterDto.getNameProducer() != null &amp;&amp; !producerFilterDto.getNameProducer().isEmpty()) {</span>
+<span class="nc" id="L111">            query.setParameter(&quot;name&quot;, &quot;%&quot; + producerFilterDto.getNameProducer() + &quot;%&quot;);</span>
+        }
+
+<span class="nc bnc" id="L114" title="All 4 branches missed.">        if (producerFilterDto.getCity() != null &amp;&amp; !producerFilterDto.getCity().isEmpty()) {</span>
+<span class="nc" id="L115">            query.setParameter(&quot;city&quot;, &quot;%&quot; + producerFilterDto.getCity() + &quot;%&quot;);</span>
+        }
+
+<span class="nc bnc" id="L118" title="All 4 branches missed.">        if (producerFilterDto.getStatus() != null &amp;&amp; !producerFilterDto.getStatus().isEmpty()) {</span>
+<span class="nc" id="L119">            query.setParameter(&quot;status&quot;, producerFilterDto.getStatus());</span>
+        }
+
+<span class="nc bnc" id="L122" title="All 4 branches missed.">        if (producerFilterDto.getTechnologyName() != null &amp;&amp; !producerFilterDto.getTechnologyName().isEmpty()) {</span>
+<span class="nc" id="L123">            query.setParameter(&quot;technologyName&quot;, producerFilterDto.getTechnologyName());</span>
+        }
+
+<span class="nc" id="L126">        List&lt;Object[]&gt; results = query.getResultList();</span>
+
+<span class="nc" id="L128">        List&lt;Map&lt;String, Object&gt;&gt; producerInfoList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        for (Object[] result : results) {</span>
+<span class="nc" id="L130">            Map&lt;String, Object&gt; producerInfo = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L131">            producerInfo.put(&quot;id&quot;, result[0]);</span>
+<span class="nc" id="L132">            producerInfo.put(&quot;nameProducer&quot;, result[1]);</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            producerInfo.put(&quot;expirationDate&quot;, result[2] != null ? result[2] : &quot;Sem contrato ativo&quot;);</span>
+<span class="nc" id="L134">            producerInfo.put(&quot;status&quot;, result[3]);</span>
+<span class="nc" id="L135">            producerInfoList.add(producerInfo);</span>
+<span class="nc" id="L136">        }</span>
+<span class="nc" id="L137">        return producerInfoList;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
